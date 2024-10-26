@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="py-3 px-6">Order No</th>
+                <th scope="col" class="py-3 px-6">API Type</th>
+                <th scope="col" class="py-3 px-6">Request Data</th>
+                <th scope="col" class="py-3 px-6">Response Data</th>
+                <th scope="col" class="py-3 px-6">Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr class="bg-white border-b">
+                <td class="py-4 px-6">{{ loop.index }}</td>
+                <td class="py-4 px-6">{{ log.api_type }}</td>
+                <td class="py-4 px-6">{{ log.request_data }}</td>
+                <td class="py-4 px-6">{{ log.response_data }}</td>
+                <td class="py-4 px-6">{{ log.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

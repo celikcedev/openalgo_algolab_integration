@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAlgo Login</title>
+    <!-- Favicon and touch icons for various devices -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        async function login(event) {
+            event.preventDefault(); // Prevent the form from submitting via the browser.
+    
+            const form = document.getElementById('loginForm');
+            const formData = new FormData(form);
+            const loginStatus = document.getElementById('loginStatus');
+    
+            loginStatus.textContent = 'Logging in...';
+    
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+    
+                if (data.status === 'error') {
+                    loginStatus.textContent = 'Error: ' + data.message;
+                } else {
+                    // Redirect to /auth/angel after successful login
+                    window.location.href = '/auth/broker';
+                }
+            } catch (error) {
+                loginStatus.textContent = 'Login failed: Please try again.';
+            }
+        }
+    </script>
+    
+</head>
+
+<body class="bg-gray-900 flex flex-col items-center justify-center h-screen text-white">
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg max-w-sm w-full">
+        <div class="flex justify-center mb-6">
+            <img class="h-20 w-auto" src="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}" alt="OpenAlgo">
+        </div>
+        <h2 class="text-3xl font-bold mb-6 text-center">Sign in to OpenAlgo</h2>
+        <form id="loginForm" onsubmit="login(event)" class="space-y-6">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+                <input type="text" id="username" name="username" required class="mt-1 block w-full px-3 py-2 bg-gray-700 text-gray-300 border-gray-600 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                <input type="password" id="password" name="password" required class="mt-1 block w-full px-3 py-2 bg-gray-700 text-gray-300 border-gray-600 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div class="flex items-center justify-center">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sign in</button>
+            </div>
+        </form>
+        <div id="loginStatus" class="text-gray-400 mt-4 text-center"></div>
+    </div>
+ 
+        <!-- Include the footer content -->
+        {% include 'footer.html' %}
+    </body>
+    </html>
